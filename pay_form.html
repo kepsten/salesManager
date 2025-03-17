@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150vh;
+            margin: 0;
+        }
+
+        #group-affiliate-form {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #group-affiliate-form label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        #group-affiliate-form input, 
+        #group-affiliate-form textarea, 
+        #group-affiliate-form select, 
+        #group-affiliate-form button {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        #group-affiliate-form input:focus, 
+        #group-affiliate-form textarea:focus, 
+        #group-affiliate-form select:focus {
+            border-color: #4ca1af;
+            outline: none;
+        }
+
+        #group-affiliate-form button {
+            background: #1a9142;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        #group-affiliate-form button:hover {
+            background: #14802e;
+        }
+        
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #22ba1a;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <form id="group-affiliate-form" name="submit-to-google-sheet">
+        <label for="customer_name">Name of the Customer:</label>
+        <input type="text" id="customer_name" name="name" required>
+
+        <label for="phone_number">Phone Number:</label>
+        <input type="tel" id="phone_number" name="phone" required>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" placeholder="Type city name" required>
+        
+        <label for="service_cargo">Service Cargo:</label>
+        <select id="service_cargo" name="service" required>
+            <option value="">Select Service</option>
+            <option value="Airbnb">Airbnb</option>
+            <option value="Appliances repair">Appliances repair</option>
+            <option value="House Cleaning">House Cleaning</option>
+            <option value="Office cleaning">Office cleaning</option>
+            <option value="Restaurant Cleaning">Restaurant Cleaning</option>
+            <option value="Carpet and sofa">Carpet and sofa</option>
+            <option value="Duct cleaning">Duct cleaning</option>
+            <option value="Electrician">Electrician</option>
+            <option value="Windows and Gutter cleaning">Windows and Gutter cleaning</option>
+            <option value="Tile and Grout cleaning">Tile and Grout cleaning</option>
+            <option value="Pressure and Power wash">Pressure and Power wash</option>
+            <option value="Car and truck cleaning">Car and truck cleaning</option>
+            <option value="Junk removal">Junk removal</option>
+            <option value="Disinfectant Spray">Disinfectant Spray</option>
+            <option value="Pest Control">Pest Control</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="Moving">Moving</option>
+        </select>
+
+        <label for="affiliator_name">Affiliator Name:</label>
+        <input type="text" id="affiliator_name" value="username" name="affiliator" readonly>
+
+        <label for="service_price">Service price:</label>
+        <input type="number" id="service_price" name="service_price">
+        
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes"></textarea>
+        
+        <input type="hidden" id="Time" name="Time" readonly>
+        <button type="submit" class="btn">Submit</button>
+    </form>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <div class="loader"></div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+
+    function getCanadianTime() {
+       let now = new Date();
+       let options = { timeZone: 'America/Toronto', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+       let formatter = new Intl.DateTimeFormat('en-CA', options);
+       let formattedTime = formatter.format(now).replace(',', '');
+       document.getElementById("Time").value = formattedTime;
+   }
+
+   
+   getCanadianTime()
+
+function loadGoogleMaps() {
+   if (typeof google === "undefined" || !google.maps) {
+       var script = document.createElement("script");
+       script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyA-kVEl5qZDIt5TKjaUAhnKEVLV_pTIODQ&libraries=places&callback=initAutocomplete";
+       script.async = true;
+       script.defer = true;
+       document.head.appendChild(script);
+   } else {
+       initAutocomplete();
+   }
+}
+
+function initAutocomplete() {
+   const input = document.getElementById("city");
+   if (!input) return;
+
+   const autocomplete = new google.maps.places.Autocomplete(input, {
+       types: ["(cities)"]
+   });
+
+   autocomplete.setFields(["address_component"]);
+   autocomplete.addListener("place_changed", function () {
+       const place = autocomplete.getPlace();
+       let city = "";
+       if (place.address_components) {
+           for (const component of place.address_components) {
+               if (component.types.includes("locality")) {
+                   city = component.long_name;
+                   break;
+               }
+           }
+       }
+       input.value = city;
+   });
+}
+
+document.addEventListener("DOMContentLoaded", loadGoogleMaps);
+
+
+
+
+   document.getElementById("group-affiliate-form").addEventListener("submit", function(event) {
+       event.preventDefault();
+       
+       document.getElementById("popup").style.display = "flex";
+       let formData = new FormData(this);
+       
+       fetch("https://script.google.com/macros/s/AKfycbzCMvKqo0YiqEBobLPYw4nZTP-cN8s1g-_K_BjbmEiv5Tc0Hh4bXTu1B6DFHkdueJEgZA/exec", {
+           method: "POST",
+           body: formData
+       })
+       .then(response => response.json())
+       .then(data => {
+           document.getElementById("popup").style.display = "none";
+           alert("Form submitted successfully!");
+           document.getElementById("group-affiliate-form").reset();
+       })
+       .catch(error => {
+           document.getElementById("popup").style.display = "none";
+           alert("Error submitting form. Try again.");
+       });
+   });
+</script>
+
+</html>
