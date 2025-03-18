@@ -104,6 +104,16 @@
 </head>
 <body>
     <form id="group-affiliate-form" name="submit-to-google-sheet">
+
+        <label for="Name_of_pro">Name of pro:</label>
+        <input type="text" id="Name_of_pro" value="username" name="Name_of_pro" readonly>
+
+        <label for="Id_no">Id no:</label>
+        <input type="text" id="Id_no" value="00" name="Id_no" readonly>
+
+        <label for="Serve_Date">Serve Date</label>
+         <input type="date" id="Serve_Date" name="Serve_Date">
+
         <label for="customer_name">Name of the Customer:</label>
         <input type="text" id="customer_name" name="name" required>
 
@@ -113,6 +123,17 @@
         <label for="city">City:</label>
         <input type="text" id="city" name="city" placeholder="Type city name" required>
         
+        <label for="Address">Address:</label>
+        <textarea name="Address" id="Address" required></textarea>
+
+
+        <label for="numbers_of_hours">Numbers of hours</label>
+        <input type="text" name="numbers_of_hours" id="numbers_of_hours">
+
+
+        <label for="numbers_of_flat">Numbers of flat</label>
+        <input type="text" name="numbers_of_flat" id="numbers_of_flat">
+
         <label for="service_cargo">Service Cargo:</label>
         <select id="service_cargo" name="service" required>
             <option value="">Select Service</option>
@@ -135,12 +156,21 @@
             <option value="Moving">Moving</option>
         </select>
 
-        <label for="affiliator_name">Affiliator Name:</label>
-        <input type="text" id="affiliator_name" value="username" name="affiliator" readonly>
-
+       
         <label for="service_price">Service price:</label>
         <input type="number" id="service_price" name="service_price">
         
+        <label for="Payment-received">Payment received</label>
+         <select name="Payment-received" id="Payment-received">
+            <option value="">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+         </select>
+
+
+         <label for="Review">Review: </label>
+         <textarea name="Review" id="Review"></textarea>
+
         <label for="notes">Notes:</label>
         <textarea id="notes" name="notes"></textarea>
         
